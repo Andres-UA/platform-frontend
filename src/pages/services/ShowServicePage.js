@@ -64,7 +64,7 @@ class ShowServicePage extends Component {
                   <thead>
                     <tr>
                       <th>
-                        <center>Nombre</center>
+                        <center>Nombre del campo</center>
                       </th>
                       <th>
                         <center>Tipo de dato</center>
@@ -85,7 +85,7 @@ class ShowServicePage extends Component {
         </Row>
         <Row>
           <Col>
-            <h5>Rutas disponibles</h5>
+            <h5>Contratos inteligentes disponibles</h5>
           </Col>
         </Row>
         <Row>

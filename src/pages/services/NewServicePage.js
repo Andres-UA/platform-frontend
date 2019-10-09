@@ -11,7 +11,7 @@ class NewServicePage extends Component {
     this.state = {
       name: '',
       description: '',
-      inputsValues: [{ name: '', type: '', isRequired: false, default: '' }]
+      inputsValues: [{ name: '', type: 'Numero', isRequired: false, default: '' }]
     };
     this.onAddItem = this.onAddItem.bind(this);
     this.handleInputNameChange = this.handleInputNameChange.bind(this);
@@ -69,7 +69,7 @@ class NewServicePage extends Component {
 
   onAddItem() {
     this.setState(state => {
-      const inputsValues = state.inputsValues.concat({ name: '', type: '', isRequired: false, default: '' });
+      const inputsValues = state.inputsValues.concat({ name: '', type: 'Numero', isRequired: false, default: '' });
       return {
         inputsValues
       };
