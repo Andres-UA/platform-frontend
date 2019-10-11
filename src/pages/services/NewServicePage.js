@@ -175,11 +175,11 @@ class NewServicePage extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-
     API.post(`service/`, {
       name: this.state.name,
       description: this.state.description,
-      model_schema: this.state.inputsValues,
+      participants: this.state.participants,
+      assets: this.state.assets,
     })
       .then(res => {
         const _id = res.data.id;
@@ -191,7 +191,7 @@ class NewServicePage extends Component {
   }
 
   render() {
-    const inputs = this.state.inputs.map((participant, index) => {
+    const inputs = this.state.inputs.map((input, index) => {
       return (
         <Row key={index}>
           <Col md={3}>
@@ -201,7 +201,7 @@ class NewServicePage extends Component {
                 name={`name-${index}`}
                 id={`name-${index}`}
                 data-context="input"
-                value={participant.name}
+                value={input.name}
                 onChange={this.handleInputsNameChange(index)}
               />
             </Form.Group>
@@ -215,7 +215,7 @@ class NewServicePage extends Component {
                 name={`type-${index}`}
                 id={`type-${index}`}
                 data-context="input"
-                value={participant.type}
+                value={input.type}
                 onChange={this.handleInputsTypeChange(index)}
               >
                 <option>Numero</option>
@@ -233,7 +233,7 @@ class NewServicePage extends Component {
                   name={`required-${index}`}
                   id={`required-${index}`}
                   data-context="input"
-                  checked={participant.isRequired}
+                  checked={input.isRequired}
                   onChange={this.handleInputsRequiredChange(index)}
                 />
               </Form.Group>
@@ -247,7 +247,7 @@ class NewServicePage extends Component {
                 name={`default-${index}`}
                 id={`default-${index}`}
                 data-context="input"
-                value={participant.default}
+                value={input.default}
                 onChange={this.handleInputsDefaultChange(index)}
               />
             </Form.Group>
@@ -270,7 +270,9 @@ class NewServicePage extends Component {
             </Card.Header>
             <Card.Body>
               <ul>
-                <li>Campo 1</li>
+                {participant.data.map((input, index) => {
+                  return <li key={index}>{input.name}</li>;
+                })}
               </ul>
             </Card.Body>
           </Card>
@@ -287,7 +289,9 @@ class NewServicePage extends Component {
             </Card.Header>
             <Card.Body>
               <ul>
-                <li>Campo 1</li>
+                {asset.data.map((input, index) => {
+                  return <li key={index}>{input.name}</li>;
+                })}
               </ul>
             </Card.Body>
           </Card>
