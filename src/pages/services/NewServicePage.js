@@ -16,7 +16,7 @@ class NewServicePage extends Component {
       participants: [],
       modal: false,
       modalType: '',
-      tableName: '',
+      tableName: ''
     };
     this.handleServiceNameChange = this.handleServiceNameChange.bind(this);
     this.handleServiceDescriptionChange = this.handleServiceDescriptionChange.bind(this);
@@ -34,33 +34,36 @@ class NewServicePage extends Component {
     this.onAddInput = this.onAddInput.bind(this);
     this.onRemoveInput = this.onRemoveInput.bind(this);
 
+    this.onRemoveParticipant = this.onRemoveParticipant.bind(this);
+    this.onRemoveAsset = this.onRemoveAsset.bind(this);
+
     this.onAddModel = this.onAddModel.bind(this);
 
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   static contextTypes = {
-    router: PropTypes.object,
+    router: PropTypes.object
   };
 
   toggleParticipantModal() {
     this.setState({
       modalType: 'participant',
-      modal: !this.state.modal,
+      modal: !this.state.modal
     });
   }
 
   toggleAssetModal() {
     this.setState({
       modalType: 'asset',
-      modal: !this.state.modal,
+      modal: !this.state.modal
     });
   }
 
   toggleModal() {
     this.setState({
       modalType: '',
-      modal: !this.state.modal,
+      modal: !this.state.modal
     });
   }
 
@@ -115,16 +118,30 @@ class NewServicePage extends Component {
     this.setState({ inputs });
   };
 
+  onRemoveParticipant = index => event => {
+    const participants = this.state.participants.filter((input, idx) => {
+      return index !== idx;
+    });
+    this.setState({ participants });
+  };
+
+  onRemoveAsset = index => event => {
+    const assets = this.state.assets.filter((input, idx) => {
+      return index !== idx;
+    });
+    this.setState({ assets });
+  };
+
   onAddInput() {
     this.setState(state => {
       const inputs = state.inputs.concat({
         name: '',
         type: 'Numero',
         isRequired: false,
-        default: '',
+        default: ''
       });
       return {
-        inputs,
+        inputs
       };
     });
   }
@@ -134,7 +151,7 @@ class NewServicePage extends Component {
       if (state.modalType === 'participant') {
         const newData = state.participants.concat({
           name: state.tableName,
-          data: state.inputs,
+          data: state.inputs
         });
         return {
           participants: newData,
@@ -143,17 +160,17 @@ class NewServicePage extends Component {
               name: '',
               type: 'Numero',
               isRequired: false,
-              default: '',
-            },
+              default: ''
+            }
           ],
           tableName: '',
           modal: false,
-          modalType: '',
+          modalType: ''
         };
       } else {
         const newData = state.assets.concat({
           name: state.tableName,
-          data: state.inputs,
+          data: state.inputs
         });
         return {
           assets: newData,
@@ -162,12 +179,12 @@ class NewServicePage extends Component {
               name: '',
               type: 'Numero',
               isRequired: false,
-              default: '',
-            },
+              default: ''
+            }
           ],
           tableName: '',
           modal: false,
-          modalType: '',
+          modalType: ''
         };
       }
     });
@@ -179,7 +196,7 @@ class NewServicePage extends Component {
       name: this.state.name,
       description: this.state.description,
       participants: this.state.participants,
-      assets: this.state.assets,
+      assets: this.state.assets
     })
       .then(res => {
         const _id = res.data.id;
@@ -263,8 +280,8 @@ class NewServicePage extends Component {
 
     const participants = this.state.participants.map((participant, index) => {
       return (
-        <Col xs={3} key={index}>
-          <Card>
+        <Col xs={2} key={index}>
+          <Card style={{ height: '20rem' }}>
             <Card.Header>
               <Card.Title as="h5">{participant.name}</Card.Title>
             </Card.Header>
@@ -275,6 +292,11 @@ class NewServicePage extends Component {
                 })}
               </ul>
             </Card.Body>
+            <Card.Footer>
+              <Button variant="danger" size="sm" onClick={this.onRemoveParticipant(index)}>
+                X
+              </Button>
+            </Card.Footer>
           </Card>
         </Col>
       );
@@ -282,8 +304,8 @@ class NewServicePage extends Component {
 
     const assets = this.state.assets.map((asset, index) => {
       return (
-        <Col xs={3} key={index}>
-          <Card>
+        <Col xs={2} key={index}>
+          <Card style={{ height: '20rem' }}>
             <Card.Header>
               <Card.Title as="h5">{asset.name}</Card.Title>
             </Card.Header>
@@ -294,6 +316,11 @@ class NewServicePage extends Component {
                 })}
               </ul>
             </Card.Body>
+            <Card.Footer>
+              <Button variant="danger" size="sm" onClick={this.onRemoveAsset(index)}>
+                X
+              </Button>
+            </Card.Footer>
           </Card>
         </Col>
       );
@@ -335,14 +362,25 @@ class NewServicePage extends Component {
               <Card.Header>
                 <Card.Title as="h5">Modelo de Datos</Card.Title>
               </Card.Header>
-              <Card.Body>Participantes, Activos...</Card.Body>
+              <Card.Body>Ahora necesitamos los compoenentes de la red participantes y activos</Card.Body>
             </Card>
             <h3>Participantes</h3>
             <Row>
               {participants}
-              <Col xs={3}>
-                <Card>
-                  <Card.Body>
+              <Col xs={2}>
+                <Card
+                  style={{
+                    height: '20rem'
+                  }}
+                  onClick={this.toggleParticipantModal}
+                >
+                  <Card.Body
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
                     <center>
                       <Button variant="success" onClick={this.toggleParticipantModal}>
                         Nuevo Participante
@@ -355,9 +393,15 @@ class NewServicePage extends Component {
             <h3>Activos</h3>
             <Row>
               {assets}
-              <Col xs={3}>
-                <Card>
-                  <Card.Body>
+              <Col xs={2}>
+                <Card style={{ height: '20rem' }}>
+                  <Card.Body
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
                     <center>
                       <Button variant="success" onClick={this.toggleAssetModal}>
                         Nuevo Activo
