@@ -16,7 +16,8 @@ class NewServicePage extends Component {
       participants: [],
       modal: false,
       modalType: '',
-      tableName: ''
+      tableName: '',
+      editMode: false,
     };
     this.handleServiceNameChange = this.handleServiceNameChange.bind(this);
     this.handleServiceDescriptionChange = this.handleServiceDescriptionChange.bind(this);
@@ -43,27 +44,27 @@ class NewServicePage extends Component {
   }
 
   static contextTypes = {
-    router: PropTypes.object
+    router: PropTypes.object,
   };
 
   toggleParticipantModal() {
     this.setState({
       modalType: 'participant',
-      modal: !this.state.modal
+      modal: !this.state.modal,
     });
   }
 
   toggleAssetModal() {
     this.setState({
       modalType: 'asset',
-      modal: !this.state.modal
+      modal: !this.state.modal,
     });
   }
 
   toggleModal() {
     this.setState({
       modalType: '',
-      modal: !this.state.modal
+      modal: !this.state.modal,
     });
   }
 
@@ -132,26 +133,45 @@ class NewServicePage extends Component {
     this.setState({ assets });
   };
 
+  onEditAsset = index => event => {
+    const assets = this.state.assets.filter((input, idx) => {
+      return index === idx;
+    });
+    const asset = assets[0];
+    this.setState({
+      inputs: asset.data,
+      tableName: asset.name,
+      modal: true,
+      modalType: 'asset',
+      editMode: true,
+    });
+  };
+
   onAddInput() {
     this.setState(state => {
       const inputs = state.inputs.concat({
         name: '',
         type: 'Numero',
         isRequired: false,
-        default: ''
+        default: '',
       });
       return {
-        inputs
+        inputs,
       };
     });
   }
 
   onAddModel() {
     this.setState(state => {
+      const editMode = false;
+      if (state.editMode) {
+        editMode = true;
+      }
+
       if (state.modalType === 'participant') {
         const newData = state.participants.concat({
           name: state.tableName,
-          data: state.inputs
+          data: state.inputs,
         });
         return {
           participants: newData,
@@ -160,17 +180,17 @@ class NewServicePage extends Component {
               name: '',
               type: 'Numero',
               isRequired: false,
-              default: ''
-            }
+              default: '',
+            },
           ],
           tableName: '',
           modal: false,
-          modalType: ''
+          modalType: '',
         };
       } else {
         const newData = state.assets.concat({
           name: state.tableName,
-          data: state.inputs
+          data: state.inputs,
         });
         return {
           assets: newData,
@@ -179,12 +199,12 @@ class NewServicePage extends Component {
               name: '',
               type: 'Numero',
               isRequired: false,
-              default: ''
-            }
+              default: '',
+            },
           ],
           tableName: '',
           modal: false,
-          modalType: ''
+          modalType: '',
         };
       }
     });
@@ -196,7 +216,7 @@ class NewServicePage extends Component {
       name: this.state.name,
       description: this.state.description,
       participants: this.state.participants,
-      assets: this.state.assets
+      assets: this.state.assets,
     })
       .then(res => {
         const _id = res.data.id;
@@ -320,6 +340,10 @@ class NewServicePage extends Component {
               <Button variant="danger" size="sm" onClick={this.onRemoveAsset(index)}>
                 X
               </Button>
+
+              <Button variant="warning" size="sm" onClick={this.onEditAsset(index)}>
+                -
+              </Button>
             </Card.Footer>
           </Card>
         </Col>
@@ -362,7 +386,9 @@ class NewServicePage extends Component {
               <Card.Header>
                 <Card.Title as="h5">Modelo de Datos</Card.Title>
               </Card.Header>
-              <Card.Body>Ahora necesitamos los compoenentes de la red participantes y activos</Card.Body>
+              <Card.Body>
+                Ahora necesitamos los compoenentes de la red participantes y activos
+              </Card.Body>
             </Card>
             <h3>Participantes</h3>
             <Row>
@@ -370,7 +396,7 @@ class NewServicePage extends Component {
               <Col xs={2}>
                 <Card
                   style={{
-                    height: '20rem'
+                    height: '20rem',
                   }}
                   onClick={this.toggleParticipantModal}
                 >
@@ -378,7 +404,7 @@ class NewServicePage extends Component {
                     style={{
                       display: 'flex',
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}
                   >
                     <center>
@@ -399,7 +425,7 @@ class NewServicePage extends Component {
                     style={{
                       display: 'flex',
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}
                   >
                     <center>
