@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import API from '../../api';
-import { Row, Col, Card, Button, Collapse } from 'react-bootstrap';
+import { Row, Col, Card, Button, Collapse, Modal, Container, Form } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 
@@ -11,8 +11,10 @@ class ShowServicePage extends Component {
       serviceId: props.match.params.serviceId,
       service: {
         assets: [],
-        participants: []
+        participants: [],
       },
+      modal: false,
+      modalType: 'assets',
       saveParticipants: false,
       saveAssets: false,
       listParticipants: false,
@@ -20,8 +22,11 @@ class ShowServicePage extends Component {
       getParticipant: false,
       getAsset: false,
       updateParticipant: false,
-      updateAsset: false
+      updateAsset: false,
     };
+    this.toggleParticipantsModal = this.toggleParticipantsModal.bind(this);
+    this.toggleAssetsModal = this.toggleAssetsModal.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +37,26 @@ class ShowServicePage extends Component {
       .catch(err => {
         console.log('error: ' + err);
       });
+  }
+
+  toggleModal() {
+    this.setState({
+      modal: !this.state.modal,
+    });
+  }
+
+  toggleParticipantsModal() {
+    this.setState({
+      modalType: 'participants',
+      modal: !this.state.modal,
+    });
+  }
+
+  toggleAssetsModal() {
+    this.setState({
+      modalType: 'assets',
+      modal: !this.state.modal,
+    });
   }
 
   render() {
@@ -95,7 +120,7 @@ class ShowServicePage extends Component {
             </Card>
           </Col>
         );
-      }
+      },
     );
 
     const transactionsToSaveAssets = this.state.service.assets.map((asset, index) => {
@@ -142,7 +167,7 @@ class ShowServicePage extends Component {
             </Card>
           </Col>
         );
-      }
+      },
     );
 
     const transactionsToListAssets = this.state.service.assets.map((asset, index) => {
@@ -191,7 +216,7 @@ class ShowServicePage extends Component {
             </Card>
           </Col>
         );
-      }
+      },
     );
 
     const transactionsToGetAsset = this.state.service.assets.map((asset, index) => {
@@ -238,7 +263,7 @@ class ShowServicePage extends Component {
             </Card>
           </Col>
         );
-      }
+      },
     );
 
     const transactionsToUpdateAsset = this.state.service.assets.map((asset, index) => {
@@ -265,31 +290,58 @@ class ShowServicePage extends Component {
 
     return (
       <Aux>
+        <Modal size="lg" show={this.state.modal} onHide={this.toggleModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {this.state.modalType === 'assets' ? 'Activos' : 'Participantes'}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Container>
+              <Row>
+                <Col md={12}>
+                  <h5>Atributos</h5>
+                </Col>
+                {this.state.modalType === 'assets' ? assets : participants}
+              </Row>
+            </Container>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.toggleModal}>
+              Cerrar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
         <Row>
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">{this.state.service.name}</Card.Title>
+                <Card.Title as="h5">
+                  <b>{this.state.service.name}</b>
+                </Card.Title>
               </Card.Header>
               <Card.Body>
                 <p>{this.state.service.description}</p>
+                <hr />
+                <Row>
+                  <Col md={6}>
+                    <Button variant="success" onClick={this.toggleParticipantsModal}>
+                      Ver Participantes
+                    </Button>
+                  </Col>
+                  <Col md={6}>
+                    <Button variant="success" onClick={this.toggleAssetsModal}>
+                      Ver Activos
+                    </Button>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <h5>
-              <b>Modelo de datos</b>
-            </h5>
-            <br />
-          </Col>
-        </Row>
-        <h5>Participantes</h5>
-        <Row>{participants}</Row>
-        <h5>Activos</h5>
-        <Row>{assets}</Row>
 
+        <br />
         <Row>
           <Col>
             <h5>Transacciones basicas disponibles</h5>
