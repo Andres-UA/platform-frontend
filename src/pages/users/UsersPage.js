@@ -1,28 +1,87 @@
-import React, {Component} from 'react';
-import {Row, Col} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Row, Col, Card, Button, Table } from 'react-bootstrap';
 
-import Aux from "../../hoc/_Aux";
-import Card from "../../App/components/MainCard";
+import API from '../../api';
+import Aux from '../../hoc/_Aux';
 
 class UsersPage extends Component {
-    render() {
-        return (
-            <Aux>
-                <Row>
-                    <Col>
-                        <Card title='Usuarios' isOption>
-                            <p>
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                            </p>
-                        </Card>
-                    </Col>
-                </Row>
-            </Aux>
-        );
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: []
+    };
+  }
+
+  componentDidMount() {
+    API.get(`user/`)
+      .then(res => {
+        this.setState({ users: res.data });
+      })
+      .catch(err => {
+        console.log('error: ' + err);
+      });
+  }
+
+  render() {
+    const users = this.state.users.map((user, index) => {
+      return (
+        <tr key={index}>
+          <th>{user.name}</th>
+          <td>{user.email}</td>
+          <td>{user.type}</td>
+          <td>
+            <Button variant="dark" size="sm" onClick={this.toggleAssetsModal}>
+              Ver
+            </Button>
+            <Button variant="warning" size="sm" onClick={this.toggleAssetsModal}>
+              Editar
+            </Button>
+            <Button variant="danger" size="sm" onClick={this.toggleAssetsModal}>
+              Eliminar
+            </Button>
+          </td>
+        </tr>
+      );
+    });
+
+    return (
+      <Aux>
+        <Row>
+          <Col>
+            <Card>
+              <Card.Header>
+                <Card.Title as="h5">Usuarios</Card.Title>
+                <Link to={`/dashboard/users/new`}>
+                  <Button
+                    variant="outline-dark"
+                    size="sm"
+                    style={{ float: 'right' }}
+                    onClick={this.toggleAssetsModal}
+                  >
+                    Crear nuevo
+                  </Button>
+                </Link>
+              </Card.Header>
+              <Card.Body>
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Tipo</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>{users}</tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Aux>
+    );
+  }
 }
 
 export default UsersPage;

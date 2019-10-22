@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import API from '../../api';
-import { Row, Col, Card, Button, Collapse, Modal, Container, Form } from 'react-bootstrap';
+import { Row, Col, Card, Button, Table, Modal, Container, Tab, Nav } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
+import { Link } from 'react-router-dom';
 
 class ShowServicePage extends Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class ShowServicePage extends Component {
       serviceId: props.match.params.serviceId,
       service: {
         assets: [],
-        participants: [],
+        participants: []
       },
       modal: false,
       modalType: 'assets',
@@ -22,7 +23,7 @@ class ShowServicePage extends Component {
       getParticipant: false,
       getAsset: false,
       updateParticipant: false,
-      updateAsset: false,
+      updateAsset: false
     };
     this.toggleParticipantsModal = this.toggleParticipantsModal.bind(this);
     this.toggleAssetsModal = this.toggleAssetsModal.bind(this);
@@ -41,21 +42,21 @@ class ShowServicePage extends Component {
 
   toggleModal() {
     this.setState({
-      modal: !this.state.modal,
+      modal: !this.state.modal
     });
   }
 
   toggleParticipantsModal() {
     this.setState({
       modalType: 'participants',
-      modal: !this.state.modal,
+      modal: !this.state.modal
     });
   }
 
   toggleAssetsModal() {
     this.setState({
       modalType: 'assets',
-      modal: !this.state.modal,
+      modal: !this.state.modal
     });
   }
 
@@ -92,196 +93,6 @@ class ShowServicePage extends Component {
                   return <li key={index}>{input.name}</li>;
                 })}
               </ul>
-            </Card.Body>
-          </Card>
-        </Col>
-      );
-    });
-
-    const transactionsToSaveParticipants = this.state.service.participants.map(
-      (participant, index) => {
-        return (
-          <Col md={6} xl={4} key={index}>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">
-                  Guardar un participante de tipo <b>{participant.name}</b>
-                </Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <p>Con esta ruta podras almacenar datos en la blockchain.</p>
-                <p>POST: </p>{' '}
-                <code>
-                  http://localhost:4000/service/{this.state.serviceId}/participant/
-                  {participant.name}
-                </code>
-                <br />
-              </Card.Body>
-            </Card>
-          </Col>
-        );
-      },
-    );
-
-    const transactionsToSaveAssets = this.state.service.assets.map((asset, index) => {
-      return (
-        <Col md={6} xl={4} key={index}>
-          <Card>
-            <Card.Header>
-              <Card.Title as="h5">
-                Guardar un participante de tipo <b>{asset.name}</b>
-              </Card.Title>
-            </Card.Header>
-            <Card.Body>
-              <p>Con esta ruta podras almacenar datos en la blockchain.</p>
-              <p>POST: </p>{' '}
-              <code>
-                http://localhost:4000/service/{this.state.serviceId}/asset/{asset.name}
-              </code>
-              <br />
-            </Card.Body>
-          </Card>
-        </Col>
-      );
-    });
-
-    const transactionsToListParticipants = this.state.service.participants.map(
-      (participant, index) => {
-        return (
-          <Col md={6} xl={4} key={index}>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">
-                  Consultar el listado de participantes de tipo <b>{participant.name}</b>
-                </Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <p>Con esta ruta podras consultar los datos almacenados en la blockchain.</p>
-                <p>GET: </p>{' '}
-                <code>
-                  http://localhost:4000/service/{this.state.serviceId}/participant/
-                  {participant.name}
-                </code>
-                <br />
-              </Card.Body>
-            </Card>
-          </Col>
-        );
-      },
-    );
-
-    const transactionsToListAssets = this.state.service.assets.map((asset, index) => {
-      return (
-        <Col md={6} xl={4} key={index}>
-          <Card>
-            <Card.Header>
-              <Card.Title as="h5">
-                Consultar el listado de participantes de tipo <b>{asset.name}</b>
-              </Card.Title>
-            </Card.Header>
-            <Card.Body>
-              <p>Con esta ruta podras consultar los datos almacenados en la blockchain.</p>
-              <p>GET: </p>{' '}
-              <code>
-                http://localhost:4000/service/{this.state.serviceId}/asset/
-                {asset.name}
-              </code>
-              <br />
-            </Card.Body>
-          </Card>
-        </Col>
-      );
-    });
-
-    const transactionsToGetParticipant = this.state.service.participants.map(
-      (participant, index) => {
-        return (
-          <Col md={6} xl={4} key={index}>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">
-                  Consultar un participante de tipo <b>{participant.name}</b>
-                </Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <p>Con esta ruta podras consultar los datos almacenados en la blockchain.</p>
-                <p>GET: </p>{' '}
-                <code>
-                  http://localhost:4000/service/{this.state.serviceId}/participant/
-                  {participant.name}
-                  /:id_participant
-                </code>
-                <br />
-              </Card.Body>
-            </Card>
-          </Col>
-        );
-      },
-    );
-
-    const transactionsToGetAsset = this.state.service.assets.map((asset, index) => {
-      return (
-        <Col md={6} xl={4} key={index}>
-          <Card>
-            <Card.Header>
-              <Card.Title as="h5">
-                Consultar un activo de tipo <b>{asset.name}</b>
-              </Card.Title>
-            </Card.Header>
-            <Card.Body>
-              <p>Con esta ruta podras consultar los datos almacenados en la blockchain.</p>
-              <p>GET: </p>{' '}
-              <code>
-                http://localhost:4000/service/{this.state.serviceId}/asset/{asset.name}/:id_activo
-              </code>
-              <br />
-            </Card.Body>
-          </Card>
-        </Col>
-      );
-    });
-
-    const transactionsToUpdateParticipant = this.state.service.participants.map(
-      (participant, index) => {
-        return (
-          <Col md={6} xl={4} key={index}>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">
-                  Actualizar un participante de tipo <b>{participant.name}</b>
-                </Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <p>Con esta ruta podras consultar los datos almacenados en la blockchain.</p>
-                <p>PUT: </p>{' '}
-                <code>
-                  http://localhost:4000/service/{this.state.serviceId}/participant/
-                  {participant.name}/:id_participant
-                </code>
-                <br />
-              </Card.Body>
-            </Card>
-          </Col>
-        );
-      },
-    );
-
-    const transactionsToUpdateAsset = this.state.service.assets.map((asset, index) => {
-      return (
-        <Col md={6} xl={4} key={index}>
-          <Card>
-            <Card.Header>
-              <Card.Title as="h5">
-                Actualizar un activo de tipo <b>{asset.name}</b>
-              </Card.Title>
-            </Card.Header>
-            <Card.Body>
-              <p>Con esta ruta podras consultar los datos almacenados en la blockchain.</p>
-              <p>PUT: </p>{' '}
-              <code>
-                http://localhost:4000/service/{this.state.serviceId}/asset/{asset.name}/:id_activo
-              </code>
-              <br />
             </Card.Body>
           </Card>
         </Col>
@@ -326,16 +137,69 @@ class ShowServicePage extends Component {
                 <hr />
                 <Row>
                   <Col md={6}>
-                    <Button variant="success" onClick={this.toggleParticipantsModal}>
-                      Ver Participantes
-                    </Button>
+                    <center>
+                      <Button variant="dark" size="sm" onClick={this.toggleParticipantsModal}>
+                        Ver Participantes
+                      </Button>
+                    </center>
                   </Col>
                   <Col md={6}>
-                    <Button variant="success" onClick={this.toggleAssetsModal}>
-                      Ver Activos
-                    </Button>
+                    <center>
+                      <Button variant="dark" size="sm" onClick={this.toggleAssetsModal}>
+                        Ver Activos
+                      </Button>
+                    </center>
                   </Col>
                 </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <h4>
+              <b>Mis transacciones</b>
+            </h4>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Card>
+              <Card.Header>
+                <Card.Title as="h5">Mis contratos inteligentes</Card.Title>
+                <Link to={`/dashboard/services/${this.state.serviceId}/NewContract`}>
+                  <Button
+                    variant="outline-dark"
+                    size="sm"
+                    style={{ float: 'right' }}
+                    onClick={this.toggleAssetsModal}
+                  >
+                    Crear nuevo
+                  </Button>
+                </Link>
+              </Card.Header>
+              <Card.Body>
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Descripción</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>Contrato 1</th>
+                      <td>Este contrato es de ejemplo...</td>
+                      <td>
+                        <Button variant="dark" size="sm" onClick={this.toggleAssetsModal}>
+                          Ver
+                        </Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
               </Card.Body>
             </Card>
           </Col>
@@ -344,181 +208,167 @@ class ShowServicePage extends Component {
         <br />
         <Row>
           <Col>
-            <h5>Transacciones basicas disponibles</h5>
+            <h4>
+              <b>Transacciones basicas disponibles</b>
+            </h4>
           </Col>
         </Row>
-
         <Row>
           <Col>
-            <Card text="danger">
-              <Card.Header>
-                <Card.Title as="h5">Transacciones para guardar nuevos participantes</Card.Title>
-                <Button
-                  style={{ float: 'right' }}
-                  size="sm"
-                  onClick={() => this.setState({ saveParticipants: !this.state.saveParticipants })}
-                >
-                  Ver
-                </Button>
-              </Card.Header>
-            </Card>
+            <Tab.Container>
+              <Tab.Container defaultActiveKey="participants">
+                <Row>
+                  <Col sm={2}>
+                    <Nav variant="pills" className="flex-column">
+                      <Nav.Item>
+                        <Nav.Link eventKey="participants">
+                          <b>Participantes</b>
+                        </Nav.Link>
+                      </Nav.Item>
+                      {this.state.service.participants.map((participant, index) => {
+                        return (
+                          <Nav.Item>
+                            <Nav.Link eventKey={participant.name}>{participant.name}</Nav.Link>
+                          </Nav.Item>
+                        );
+                      })}
+                      <Nav.Item>
+                        <Nav.Link eventKey="assets">
+                          <b>Activos</b>
+                        </Nav.Link>
+                      </Nav.Item>
+                      {this.state.service.assets.map((asset, index) => {
+                        return (
+                          <Nav.Item>
+                            <Nav.Link eventKey={asset.name}>{asset.name}</Nav.Link>
+                          </Nav.Item>
+                        );
+                      })}
+                    </Nav>
+                  </Col>
+                  <Col sm={10}>
+                    <Tab.Content>
+                      <Tab.Pane eventKey="participants">
+                        <p>
+                          Aqui podras ver las transacciones basicas que estan disponibles para cada
+                          tipo de usuario
+                        </p>
+                      </Tab.Pane>
+                      {this.state.service.participants.map((participant, index) => {
+                        return (
+                          <Tab.Pane eventKey={participant.name}>
+                            <h5>Guardar datos</h5>
+                            <p>
+                              Para guardar un participante de tipo <b>{participant.name}</b> debes
+                              usar la siguiente ruta
+                            </p>
+                            <b>POST: </b>{' '}
+                            <code>
+                              http://localhost:4000/service/{this.state.serviceId}/participant/
+                              {participant.name}
+                            </code>
+                            <hr />
+                            <h5>Listar datos</h5>
+                            <p>
+                              Para consultar el listado de participantes de tipo{' '}
+                              <b>{participant.name}</b> debes usar la siguiente ruta
+                            </p>
+                            <b>GET: </b>{' '}
+                            <code>
+                              http://localhost:4000/service/{this.state.serviceId}/participant/
+                              {participant.name}
+                            </code>
+                            <hr />
+                            <h5>Obtener un dato en particular</h5>
+                            <p>
+                              Para consultar un participante de tipo <b>{participant.name}</b> debes
+                              usar la siguiente ruta
+                            </p>
+                            <b>GET: </b>{' '}
+                            <code>
+                              http://localhost:4000/service/{this.state.serviceId}/participant/
+                              {participant.name}
+                              /:id_participant
+                            </code>
+                            <hr />
+                            <h5>Actualizar datos</h5>
+                            <p>
+                              Para actualizar un participante de tipo <b>{participant.name}</b>{' '}
+                              debes usar la siguiente ruta
+                            </p>
+                            <b>PUT: </b>{' '}
+                            <code>
+                              http://localhost:4000/service/{this.state.serviceId}/participant/
+                              {participant.name}/:id_participant
+                            </code>
+                            <hr />
+                          </Tab.Pane>
+                        );
+                      })}
+                      <Tab.Pane eventKey="assets">
+                        <p>
+                          Aqui podras ver las transacciones basicas que estan disponibles para cada
+                          tipo de activo
+                        </p>
+                      </Tab.Pane>
+                      {this.state.service.assets.map((asset, index) => {
+                        return (
+                          <Tab.Pane eventKey={asset.name}>
+                            <h5>Guardar datos</h5>
+                            <p>
+                              Para guardar un activo de tipo <b>{asset.name}</b> debes usar la
+                              siguiente ruta
+                            </p>
+                            <b>POST: </b>{' '}
+                            <code>
+                              http://localhost:4000/service/{this.state.serviceId}/asset/
+                              {asset.name}
+                            </code>
+                            <hr />
+                            <h5>Listar datos</h5>
+                            <p>
+                              Para consultar el listado de activos de tipo <b>{asset.name}</b> debes
+                              usar la siguiente ruta
+                            </p>
+                            <b>GET: </b>{' '}
+                            <code>
+                              http://localhost:4000/service/{this.state.serviceId}/asset/
+                              {asset.name}
+                            </code>
+                            <hr />
+                            <h5>Obtener un dato en particular</h5>
+                            <p>
+                              Para consultar un activo de tipo <b>{asset.name}</b> debes usar la
+                              siguiente ruta
+                            </p>
+                            <b>GET: </b>{' '}
+                            <code>
+                              http://localhost:4000/service/{this.state.serviceId}/asset/
+                              {asset.name}
+                              /:id_activo
+                            </code>
+                            <hr />
+                            <h5>Actualizar datos</h5>
+                            <p>
+                              Para actualizar un activo de tipo <b>{asset.name}</b> debes usar la
+                              siguiente ruta
+                            </p>
+                            <b>PUT: </b>{' '}
+                            <code>
+                              http://localhost:4000/service/{this.state.serviceId}/asset/
+                              {asset.name}/:id_activo
+                            </code>
+                            <hr />
+                          </Tab.Pane>
+                        );
+                      })}
+                    </Tab.Content>
+                  </Col>
+                </Row>
+              </Tab.Container>
+            </Tab.Container>
           </Col>
         </Row>
-
-        <Collapse in={this.state.saveParticipants}>
-          <Row>{transactionsToSaveParticipants}</Row>
-        </Collapse>
-
-        <Row>
-          <Col>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">Transacciones para guardar nuevos activos</Card.Title>
-                <Button
-                  style={{ float: 'right' }}
-                  size="sm"
-                  onClick={() => this.setState({ saveAssets: !this.state.saveAssets })}
-                >
-                  Ver
-                </Button>
-              </Card.Header>
-            </Card>
-          </Col>
-        </Row>
-
-        <Collapse in={this.state.saveAssets}>
-          <Row>{transactionsToSaveAssets}</Row>
-        </Collapse>
-
-        <Row>
-          <Col>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">
-                  Transacciones para obtener un listado de participantes
-                </Card.Title>
-                <Button
-                  style={{ float: 'right' }}
-                  size="sm"
-                  onClick={() => this.setState({ listParticipants: !this.state.listParticipants })}
-                >
-                  Ver
-                </Button>
-              </Card.Header>
-            </Card>
-          </Col>
-        </Row>
-
-        <Collapse in={this.state.listParticipants}>
-          <Row>{transactionsToListParticipants}</Row>
-        </Collapse>
-
-        <Row>
-          <Col>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">Transacciones para obtener un listado de activos</Card.Title>
-                <Button
-                  style={{ float: 'right' }}
-                  size="sm"
-                  onClick={() => this.setState({ listAssets: !this.state.listAssets })}
-                >
-                  Ver
-                </Button>
-              </Card.Header>
-            </Card>
-          </Col>
-        </Row>
-
-        <Collapse in={this.state.listAssets}>
-          <Row>{transactionsToListAssets}</Row>
-        </Collapse>
-
-        <Row>
-          <Col>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">Transacciones para obtener un participante</Card.Title>
-                <Button
-                  style={{ float: 'right' }}
-                  size="sm"
-                  onClick={() => this.setState({ getParticipant: !this.state.getParticipant })}
-                >
-                  Ver
-                </Button>
-              </Card.Header>
-            </Card>
-          </Col>
-        </Row>
-
-        <Collapse in={this.state.getParticipant}>
-          <Row>{transactionsToGetParticipant}</Row>
-        </Collapse>
-
-        <Row>
-          <Col>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">Transacciones para obtener un activo</Card.Title>
-                <Button
-                  style={{ float: 'right' }}
-                  size="sm"
-                  onClick={() => this.setState({ getAsset: !this.state.getAsset })}
-                >
-                  Ver
-                </Button>
-              </Card.Header>
-            </Card>
-          </Col>
-        </Row>
-
-        <Collapse in={this.state.getAsset}>
-          <Row>{transactionsToGetAsset}</Row>
-        </Collapse>
-
-        <Row>
-          <Col>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">Transacciones para actualizar un participante</Card.Title>
-                <Button
-                  style={{ float: 'right' }}
-                  size="sm"
-                  onClick={() =>
-                    this.setState({ updateParticipant: !this.state.updateParticipant })
-                  }
-                >
-                  Ver
-                </Button>
-              </Card.Header>
-            </Card>
-          </Col>
-        </Row>
-
-        <Collapse in={this.state.updateParticipant}>
-          <Row>{transactionsToUpdateParticipant}</Row>
-        </Collapse>
-
-        <Row>
-          <Col>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h5">Transacciones para actualizar un activo</Card.Title>
-                <Button
-                  style={{ float: 'right' }}
-                  size="sm"
-                  onClick={() => this.setState({ updateAsset: !this.state.updateAsset })}
-                >
-                  Ver
-                </Button>
-              </Card.Header>
-            </Card>
-          </Col>
-        </Row>
-
-        <Collapse in={this.state.updateAsset}>
-          <Row>{transactionsToUpdateAsset}</Row>
-        </Collapse>
       </Aux>
     );
   }
