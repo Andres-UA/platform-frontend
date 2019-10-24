@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
@@ -6,13 +7,49 @@ import Aux from '../../../../../hoc/_Aux';
 import DEMO from '../../../../../store/constant';
 
 import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
-//import Avatar2 from '../../../../../assets/images/user/avatar-2.jpg';
-//import Avatar3 from '../../../../../assets/images/user/avatar-3.jpg';
+import API from '../../../../../api';
 
 class NavRight extends Component {
-  state = {
-    listOpen: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      listOpen: false,
+      name: '',
+    };
+    this.onLogout = this.onLogout.bind(this);
+  }
+  static contextTypes = {
+    router: PropTypes.object,
   };
+
+  componentWillMount() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      API.post(
+        `auth/me`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+        .then(res => {
+          if (res.data.success) {
+            this.setState({ name: res.data.user.name });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }
+
+  onLogout() {
+    localStorage.setItem('token', '');
+    localStorage.removeItem('token');
+    this.context.router.history.push(`/auth/login`);
+  }
 
   render() {
     return (
@@ -105,8 +142,13 @@ class NavRight extends Component {
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">
                   <img src={Avatar1} className="img-radius" alt="User Profile" />
-                  <span>Usuario</span>
-                  <a href={DEMO.BLANK_LINK} className="dud-logout" title="Logout">
+                  <span>{this.state.name}</span>
+                  <a
+                    href={DEMO.BLANK_LINK}
+                    className="dud-logout"
+                    title="Logout"
+                    onClick={this.onLogout}
+                  >
                     <i className="feather icon-log-out" />
                   </a>
                 </div>
@@ -121,17 +163,6 @@ class NavRight extends Component {
                       <i className="feather icon-user" /> Perfil
                     </a>
                   </li>
-                  {/*<li>
-                    <a href={DEMO.BLANK_LINK} className="dropdown-item">
-                      <i className="feather icon-mail" /> My Messages
-                    </a>
-                  </li>
-                  <li>
-                    <a href={DEMO.BLANK_LINK} className="dropdown-item">
-                      <i className="feather icon-lock" /> Lock Screen
-                    </a>
-                  </li>
-                   */}
                 </ul>
               </Dropdown.Menu>
             </Dropdown>

@@ -11,16 +11,40 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      identification: '',
-      password: ''
+      identification: '0123456789',
+      password: '123456789',
     };
     this.handleIdentificationChange = this.handleIdentificationChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      API.post(
+        `auth/me`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+        .then(res => {
+          if (res.data.success) {
+            this.context.router.history.push(`/dashboard/`);
+          }
+        })
+        .catch(err => {
+          console.log('error: ' + err);
+        });
+    }
+  }
+
   static contextTypes = {
-    router: PropTypes.object
+    router: PropTypes.object,
   };
 
   handleIdentificationChange(event) {
@@ -36,12 +60,11 @@ class Login extends React.Component {
 
     API.post(`auth/login`, {
       identification: this.state.identification,
-      password: this.state.password
+      password: this.state.password,
     })
       .then(res => {
         if (res.data.success) {
           localStorage.setItem('token', res.data.token);
-          localStorage.setItem('user', res.data.user);
           this.context.router.history.push(`/dashboard/`);
         } else {
           console.log('ERROR!');

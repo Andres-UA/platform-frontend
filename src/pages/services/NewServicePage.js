@@ -10,6 +10,7 @@ class NewServicePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      inputTypes: ['Número', 'Texto', 'Logico'],
       name: '',
       description: '',
       inputs: [{ name: '', type: 'Numero', isRequired: false, default: '' }],
@@ -22,7 +23,7 @@ class NewServicePage extends Component {
       indexEdit: null,
       nameIsInvalid: false,
       nameError: false,
-      descriptionError: false
+      descriptionError: false,
     };
     this.handleServiceNameChange = this.handleServiceNameChange.bind(this);
     this.handleServiceDescriptionChange = this.handleServiceDescriptionChange.bind(this);
@@ -49,7 +50,7 @@ class NewServicePage extends Component {
   }
 
   static contextTypes = {
-    router: PropTypes.object
+    router: PropTypes.object,
   };
 
   notify() {
@@ -59,7 +60,7 @@ class NewServicePage extends Component {
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
-      draggable: false
+      draggable: false,
     });
   }
 
@@ -73,9 +74,9 @@ class NewServicePage extends Component {
           name: '',
           type: 'Numero',
           isRequired: false,
-          default: ''
-        }
-      ]
+          default: '',
+        },
+      ],
     });
   }
 
@@ -89,16 +90,16 @@ class NewServicePage extends Component {
           name: '',
           type: 'Numero',
           isRequired: false,
-          default: ''
-        }
-      ]
+          default: '',
+        },
+      ],
     });
   }
 
   toggleModal() {
     this.setState({
       modalType: '',
-      modal: !this.state.modal
+      modal: !this.state.modal,
     });
   }
 
@@ -178,7 +179,7 @@ class NewServicePage extends Component {
       modal: true,
       modalType: 'participant',
       editMode: true,
-      indexEdit: index
+      indexEdit: index,
     });
   };
 
@@ -193,7 +194,7 @@ class NewServicePage extends Component {
       modal: true,
       modalType: 'asset',
       editMode: true,
-      indexEdit: index
+      indexEdit: index,
     });
   };
 
@@ -203,10 +204,10 @@ class NewServicePage extends Component {
         name: '',
         type: 'Numero',
         isRequired: false,
-        default: ''
+        default: '',
       });
       return {
-        inputs
+        inputs,
       };
     });
   }
@@ -223,7 +224,7 @@ class NewServicePage extends Component {
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
-          draggable: false
+          draggable: false,
         });
         return { nameIsInvalid: true };
       }
@@ -236,7 +237,7 @@ class NewServicePage extends Component {
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
-          draggable: false
+          draggable: false,
         });
         return { nameIsInvalid: true };
       }
@@ -249,12 +250,13 @@ class NewServicePage extends Component {
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
-          draggable: false
+          draggable: false,
         });
         return { nameIsInvalid: true };
       }
 
       if (isCorrect) {
+        const inputTypes = this.state.inputTypes.concat(this.state.tableName);
         if (state.modalType === 'participant') {
           let newData = state.participants;
 
@@ -263,7 +265,7 @@ class NewServicePage extends Component {
           } else {
             newData = newData.concat({
               name: state.tableName,
-              data: state.inputs
+              data: state.inputs,
             });
           }
           toast.success('Participante agregado correctamente.', {
@@ -272,7 +274,7 @@ class NewServicePage extends Component {
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
-            draggable: false
+            draggable: false,
           });
           return {
             participants: newData,
@@ -281,15 +283,16 @@ class NewServicePage extends Component {
                 name: '',
                 type: 'Numero',
                 isRequired: false,
-                default: ''
-              }
+                default: '',
+              },
             ],
             tableName: '',
             modal: false,
             modalType: '',
             editMode: false,
             indexEdit: null,
-            nameIsInvalid: false
+            nameIsInvalid: false,
+            inputTypes,
           };
         } else {
           let newData = state.assets;
@@ -299,7 +302,7 @@ class NewServicePage extends Component {
           } else {
             newData = newData.concat({
               name: state.tableName,
-              data: state.inputs
+              data: state.inputs,
             });
           }
           toast.success('Activo agregado correctamente.', {
@@ -308,7 +311,7 @@ class NewServicePage extends Component {
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
-            draggable: false
+            draggable: false,
           });
           return {
             assets: newData,
@@ -317,15 +320,16 @@ class NewServicePage extends Component {
                 name: '',
                 type: 'Numero',
                 isRequired: false,
-                default: ''
-              }
+                default: '',
+              },
             ],
             tableName: '',
             modal: false,
             modalType: '',
             editMode: false,
             indexEdit: null,
-            nameIsInvalid: false
+            nameIsInvalid: false,
+            inputTypes,
           };
         }
       }
@@ -345,7 +349,7 @@ class NewServicePage extends Component {
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
-        draggable: false
+        draggable: false,
       });
     }
 
@@ -357,7 +361,7 @@ class NewServicePage extends Component {
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
-        draggable: false
+        draggable: false,
       });
     }
 
@@ -369,10 +373,10 @@ class NewServicePage extends Component {
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
-        draggable: false
+        draggable: false,
       });
       this.setState({
-        nameError: true
+        nameError: true,
       });
     }
 
@@ -384,10 +388,10 @@ class NewServicePage extends Component {
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
-        draggable: false
+        draggable: false,
       });
       this.setState({
-        descriptionError: true
+        descriptionError: true,
       });
     }
 
@@ -396,7 +400,7 @@ class NewServicePage extends Component {
         name: this.state.name,
         description: this.state.description,
         participants: this.state.participants,
-        assets: this.state.assets
+        assets: this.state.assets,
       })
         .then(res => {
           const _id = res.data.id;
@@ -436,9 +440,9 @@ class NewServicePage extends Component {
                 value={input.type}
                 onChange={this.handleInputsTypeChange(index)}
               >
-                <option>Numero</option>
-                <option>Cadena</option>
-                <option>Fecha</option>
+                {this.state.inputTypes.map((element, index) => {
+                  return <option key={index}>{element}</option>;
+                })}
               </Form.Control>
             </Form.Group>
           </Col>
@@ -584,7 +588,7 @@ class NewServicePage extends Component {
               <Col xs={2}>
                 <Card
                   style={{
-                    height: '20rem'
+                    height: '20rem',
                   }}
                   onClick={this.toggleParticipantModal}
                 >
@@ -592,7 +596,7 @@ class NewServicePage extends Component {
                     style={{
                       display: 'flex',
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}
                   >
                     <center>
@@ -613,7 +617,7 @@ class NewServicePage extends Component {
                     style={{
                       display: 'flex',
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}
                   >
                     <center>
